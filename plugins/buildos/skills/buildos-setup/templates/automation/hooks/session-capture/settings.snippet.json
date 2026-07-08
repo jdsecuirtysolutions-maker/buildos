@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "agent",
+            "prompt": "You are the JustinOS session-capture hook. Your hook input includes `transcript_path` (the JSONL transcript of the session that just ended) and `cwd` (the project root). Read the full instructions at `${cwd}/.claude/hooks/session-capture-prompt.md` and follow them EXACTLY: distill the transcript into a short, durable note under `${cwd}/knowledge/sessions/<date>.md` — decisions, corrections, source-stamped facts, and open questions only; ignore process noise; write nothing if the session had no substantive content. If `transcript_path` is not provided, use the most recently modified transcript for this project under ~/.claude/projects/.",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}

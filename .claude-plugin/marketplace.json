@@ -1,0 +1,16 @@
+{
+  "name": "buildos",
+  "owner": {
+    "name": "Justin Delshad"
+  },
+  "description": "BuildOS — a reusable operating system for building with AI: engineering discipline, a domain knowledge base, and project-fit automation.",
+  "plugins": [
+    {
+      "name": "buildos",
+      "source": "./plugins/buildos",
+      "description": "Bootstrap any project with the BuildOS operating system via the buildos-setup skill.",
+      "category": "productivity",
+      "keywords": ["buildos", "workflow", "scaffolding", "methodology", "context-engineering"]
+    }
+  ]
+}

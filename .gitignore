@@ -1,0 +1,3 @@
+.DS_Store
+# Never commit raw domain material dropped into a project's knowledge base (privacy default)
+knowledge/raw/

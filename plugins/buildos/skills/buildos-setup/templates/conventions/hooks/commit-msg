@@ -1,0 +1,45 @@
+#!/bin/sh
+#
+# BuildOS commit-msg hook — verification attestation gate.
+#
+# Blocks a commit unless its message carries a `Verified:` trailer naming the flow that was
+# run to verify the change. See conventions/commit-enforcement.md for the HONEST scope of what
+# this does (forces a conscious attestation) and does NOT do (confirm verification actually ran).
+#
+# git passes the path to the proposed commit message file as $1.
+
+msg_file="$1"
+[ -z "$msg_file" ] && exit 0
+msg=$(cat "$msg_file" 2>/dev/null)
+
+# Skip auto-generated merge commits (message starts with "Merge ").
+case "$msg" in
+  "Merge "*) exit 0 ;;
+esac
+
+# Accept a `Verified:` trailer with non-empty content (case-insensitive, leading whitespace ok).
+if printf '%s\n' "$msg" | grep -iqE '^[[:space:]]*Verified:[[:space:]]*[^[:space:]]'; then
+  exit 0
+fi
+
+# No marker → block, with a helpful, honest message.
+cat >&2 <<'EOF'
+
+[BuildOS] COMMIT BLOCKED — missing verification attestation.
+
+This commit has no `Verified:` trailer. Add a line to the commit message naming the flow
+you actually ran to verify this change, e.g.:
+
+    Verified: ran the end-to-end auth flow; rejected the unauthenticated case (401)
+
+For a change with nothing to run:
+
+    Verified: docs only — no executable change
+
+What this gate does: forces a CONSCIOUS attestation that verification happened.
+What it does NOT do: confirm it actually did. A hollow trailer or `git commit --no-verify`
+both bypass it — by design. The gate turns a silent skip into a conscious choice; it cannot
+make the choice an honest one. That part is on you.
+
+EOF
+exit 1
