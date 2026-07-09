@@ -28,7 +28,7 @@ Each is optional on top of the last.
    -thing loop; a BUG/IMP tracker. Works for any project, alone.
 2. **Knowledge** — an *input*. Drop a domain's material into `knowledge/`; BuildOS compiles it into a
    cited index so the AI reasons with *your* context instead of generic priors. Index-and-retrieve by
-   default — no vector DB, no RAG-blows-up-the-window.
+   default — no heavyweight vector DB or RAG layer required.
 3. **Automation** — an *output*. A trial-seeded catalog of real automations the setup proposes and
    wires for your project (a session-capture hook, an orchestrator, …). Manual-first: nothing gets
    automated until its manual form is proven.
