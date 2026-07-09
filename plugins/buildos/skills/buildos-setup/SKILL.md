@@ -1,6 +1,6 @@
 ---
 name: buildos-setup
-description: Bootstrap a project with BuildOS: engineering-discipline rules, a BUG/IMP tracker, the two-phase build model, loops, a knowledge base, and project-fit automation.
+description: "Bootstrap a project with BuildOS: engineering-discipline rules, a BUG/IMP tracker, the two-phase build model, loops, a knowledge base, and project-fit automation."
 disable-model-invocation: true
 allowed-tools: Bash Read Write Edit Grep Glob
 ---

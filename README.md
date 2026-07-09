@@ -1,14 +1,19 @@
 # BuildOS
 
-**An operating system for building *with* AI — not prompts, a discipline.**
+**A lightweight operating system for working with AI coding agents** — project discipline,
+reusable context, and repeatable build sessions.
+
+> **Status: early public release.** The core workflow and templates are usable today. The knowledge
+> layer is tested; the automation/orchestration pieces are newer and partly experimental.
+> **Try it in a test repo first.**
 
 The promise of AI was to *offload* work. The reality, for a lot of us, is *babysitting* it —
 impressive-looking output that doesn't actually work, or hours of fine-tuning to get it right.
 
-BuildOS is what fixed that for me. It's the set of rules, scaffolding, and automation I extracted
-after shipping a real product with an AI coding agent — the difference between "a demo that passes
-once" and "a thing that actually works." The core idea: **the bottleneck isn't the model, it's
-context and process.** BuildOS engineers both.
+BuildOS is what fixed that for me: the rules, scaffolding, and automation I extracted after using an
+AI coding agent to ship a real product — the difference between "a demo that passes once" and "a
+thing that actually works." The core idea: **the bottleneck isn't the model, it's context and
+process.** BuildOS engineers both.
 
 Built for **Claude Code (CLI)**.
 
@@ -28,14 +33,29 @@ Each is optional on top of the last.
    wires for your project (a session-capture hook, an orchestrator, …). Manual-first: nothing gets
    automated until its manual form is proven.
 
+## Who this is for
+
+- Solo builders using Claude Code
+- Non-traditional developers building with AI
+- Technical founders who need better continuity between sessions
+- Teams experimenting with AI-assisted development workflows
+
+## What this is *not*
+
+- Not a replacement for engineering judgment
+- Not a full agent framework
+- Not a security sandbox
+- Not production governance for enterprise teams — yet
+
 ## Honest status
 
-BuildOS is used, not theoretical — but it's not finished, and pretending otherwise would betray the
-whole point ("planned ≠ built").
+BuildOS is used, not theoretical — but it's early and not finished, and pretending otherwise would
+betray the whole point ("planned ≠ built"). It's the working method of one builder, published so
+others can use and pressure-test it — not a validated framework with a track record behind it yet.
 
 | Layer | State |
 |-------|-------|
-| Discipline | **Built & battle-tested** (shipped a real product on it) |
+| Discipline | **Built** — used to ship a real product end-to-end |
 | Knowledge | **Built & tested** (incl. on a non-software project — analyzing a real building) |
 | Automation → session-capture hook | **Built.** Distillation logic verified against a real transcript. `SessionEnd` `type: agent` hooks are experimental; first live run confirms the plumbing. |
 | Automation → Control Center (orchestrator) | **Specced**, built against the next real project (a dispatcher needs sessions to dispatch) |
@@ -56,6 +76,11 @@ Then, in any project directory:
 It detects your stack, interviews for what code can't tell it, ingests any domain knowledge you
 drop in, fills a tailored `CLAUDE.md` + tracker, and proposes automation that fits the project.
 
+> **Heads-up — this is developer tooling, not a passive markdown guide.** `buildos-setup` declares
+> and uses `Bash, Read, Write, Edit, Grep, Glob`: it runs shell commands and reads/writes files in
+> your project to scaffold `CLAUDE.md`, the tracker, and hooks. Skim what it does and **run it in a
+> throwaway/test repo first.** See [SECURITY.md](SECURITY.md).
+
 ## Or just borrow the methodology
 
 Not on Claude Code? The whole system is readable markdown under
@@ -68,6 +93,12 @@ and the automation catalog. Copy what's useful.
 Because it's the layer *between* you and the model that decides what the model can see and do at any
 moment — its context, its constraints, its verification. That's context engineering, and right now
 it's the whole game.
+
+## Security
+
+BuildOS installs developer tooling that executes shell commands and writes files in your project.
+Review before running, prefer a test repo, and see [SECURITY.md](SECURITY.md) for scope and how to
+report an issue.
 
 ## License
 
