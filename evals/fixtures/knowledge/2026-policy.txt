@@ -1,0 +1,4 @@
+Example Company — approved retention policy, 2026-08-01.
+This supersedes the 2025-01-01 retention requirement.
+Retain support transcripts for 30 days.
+This synthetic document contains no real customer information.

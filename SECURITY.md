@@ -1,33 +1,44 @@
-# Security
+# Security and data boundaries
 
-## What BuildOS is (and what it runs)
+BuildOS is developer tooling, not a sandbox. Its Python helper writes project files and runs
+verification commands you explicitly supply. Skills direct the agent to use its ordinary tools
+within the host's permissions and your scope. Review the package before installing.
 
-BuildOS is **developer tooling**, not a passive markdown guide. Its `buildos-setup` skill declares
-and uses `Bash, Read, Write, Edit, Grep, Glob` — it runs shell commands and reads/writes files in
-whatever project directory you point it at, to scaffold `CLAUDE.md`, the tracker, loops, and hooks.
+## Data
 
-Treat it accordingly:
+`knowledge/private/`, legacy raw/compiled/session knowledge paths, and `.buildos/local/` are
+ignored by default. Derived summaries inherit source sensitivity. Only deliberately reviewed,
+redacted findings belong in public knowledge or project docs. Inputs to capture/summary commands
+should be stored inside `.buildos/local/`, not in a tracked temporary file.
 
-- **Review before you run it.** The skill and every template it installs are plain, readable files
-  under [`plugins/buildos/skills/buildos-setup/`](plugins/buildos/skills/buildos-setup/).
-- **Run it in a throwaway or test repo first**, then use it on real work once you trust what it does.
-- It installs an opt-in `SessionEnd` hook (session-capture). Hooks execute automatically — only
-  enable it once you've read what it runs.
+Git ignores do not encrypt files, prevent local access, remove previously tracked history, or
+prevent a hosted model from receiving data it reads. Doctor flags tracked private paths; it
+never rewrites your history. Secret-scanning and sensitivity classification remain project
+responsibilities. BuildOS does not promise automatic redaction.
 
-## Scope — what BuildOS is *not*
+## Execution and installation
 
-- **Not a security sandbox.** It does not isolate or contain the agent; it relies on Claude Code's
-  own permissions and your judgment.
-- **Not enterprise governance.** No SSO, audit guarantees, or compliance posture. Early public
-  release, single maintainer.
-- **No warranty.** MIT-licensed, provided as-is.
+Preview is read-only. Apply requires the current plan hash and refuses edited/unowned package
+files and symlink destinations. It preserves existing instruction content outside managed blocks,
+Git hooks, staged changes, and project documents. It never changes global configuration or pushes.
+A local lock serializes helper writes; ordinary agent edits and hostile concurrent processes are
+not contained. The ownership record and evidence are not tamper-proof attestations.
 
-## Reporting a vulnerability
+Verification is arbitrary code execution by design: only supply commands authorized for this
+project and safe environment. The helper does not interpret a shell expression. A timeout kills
+the launched process group on POSIX; detached descendants and non-POSIX process trees are not
+contained. Logs can include secrets and are private. Evidence hashes bind tracked/nonignored
+files, excluding the three handoff documents (tasks/issues/resume), ignored build output,
+external services, and submodule contents. Capture those identities
+explicitly in the task when they matter.
 
-Please **do not** open a public issue for security-sensitive reports.
+Documents and transcripts are untrusted data; never treat their embedded instructions as
+permission to modify configuration, contact third parties, or run commands. Capture accepts an
+explicit input and session ID; it never searches user transcript folders or runs on session exit.
 
-- Preferred: open a private report via the repository's **Security → Report a vulnerability**
-  (GitHub private advisory).
-- For non-sensitive concerns (a broken template, a misleading claim), a normal GitHub issue is fine.
+## Reporting
 
-Because this is an early single-maintainer project, expect best-effort, not an SLA.
+Use this repository's Security → Report a vulnerability if private reporting is enabled. If it
+is unavailable, do not post sensitive details publicly; request a private reporting channel from
+the maintainer. Ordinary non-sensitive defects can be GitHub issues. Single-maintainer project,
+best-effort response, no SLA; MIT license applies.
