@@ -1,12 +1,18 @@
 {
   "name": "buildos",
-  "version": "0.2.0",
-  "description": "The BuildOS operating system for AI-assisted projects: engineering-discipline rules, a BUG/IMP tracker, the two-phase build model, loops, a domain knowledge base, and project-fit automation. Provides the buildos-setup skill.",
+  "version": "0.3.0",
+  "description": "BuildOS shared workflow and manual Claude compatibility. Codex is the primary tested integration; no lifecycle hooks are installed.",
   "author": {
     "name": "Justin Delshad"
   },
   "license": "MIT",
   "homepage": "https://github.com/jdsecuirtysolutions-maker/buildos",
   "repository": "https://github.com/jdsecuirtysolutions-maker/buildos",
-  "keywords": ["buildos", "workflow", "scaffolding", "methodology", "context-engineering"]
+  "keywords": [
+    "buildos",
+    "workflow",
+    "scaffolding",
+    "methodology",
+    "context-engineering"
+  ]
 }

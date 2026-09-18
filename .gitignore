@@ -1,3 +1,11 @@
 .DS_Store
 # Never commit raw domain material dropped into a project's knowledge base (privacy default)
 knowledge/raw/
+knowledge/private/
+knowledge/compiled/
+knowledge/sessions/
+knowledge/INDEX.md
+.buildos/local/
+.buildos/write.lock
+__pycache__/
+*.pyc

@@ -1,0 +1,19 @@
+{
+  "name": "buildos",
+  "version": "0.3.0",
+  "description": "Project continuity and evidence-backed execution for Codex.",
+  "author": {"name": "Justin Delshad"},
+  "license": "MIT",
+  "homepage": "https://github.com/jdsecuirtysolutions-maker/buildos",
+  "repository": "https://github.com/jdsecuirtysolutions-maker/buildos",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "BuildOS",
+    "shortDescription": "Plan, verify, and resume project work",
+    "longDescription": "A Codex-first workflow with safe project setup, verification evidence, private knowledge maintenance, and explicit session capture.",
+    "developerName": "Justin Delshad",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": ["Set up BuildOS for this project.", "Resume this project's next BuildOS task."]
+  }
+}

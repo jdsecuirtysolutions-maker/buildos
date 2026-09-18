@@ -3,7 +3,7 @@
   "owner": {
     "name": "Justin Delshad"
   },
-  "description": "BuildOS — a reusable operating system for building with AI: engineering discipline, a domain knowledge base, and project-fit automation.",
+  "description": "BuildOS — shared project discipline with a Codex-first integration and manual Claude compatibility.",
   "plugins": [
     {
       "name": "buildos",

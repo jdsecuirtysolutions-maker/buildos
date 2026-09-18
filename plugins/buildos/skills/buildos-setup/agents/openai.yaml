@@ -1,0 +1,6 @@
+interface:
+  display_name: "BuildOS setup"
+  short_description: "Safely install or maintain BuildOS projects"
+  default_prompt: "Use $buildos-setup to set up BuildOS in this project."
+policy:
+  allow_implicit_invocation: false
