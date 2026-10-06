@@ -25,18 +25,19 @@ It works from the plugin or an installed project copy.
    `--apply --expect-plan <printed-hash>` when installation is authorized. A changed payload
    or target requires another preview. Unowned/edited package files cause a refusal; resolve
    the specific conflict, never blanket overwrite. Existing project documents are preserved;
-   merge relevant facts deliberately if they already exist.
+   merge relevant facts deliberately if they already exist. When the host is Claude Code or
+   the user asks for Claude support, add `--claude` to both the preview and apply commands.
 5. Run `python3 <helper> doctor --target <project>`. Tailor `docs/buildos/PROJECT.md` and
    `RESUME_HERE.md`; seed one useful task in `BUILD_SESSION_PROMPTS.md` when the goal is known.
    Use its entry-gate/evidence fields for complex work. No generic backlog is required.
    Verify generated references resolve. Report unknowns and conflicts.
-6. Explain where files landed and the first task. Start a fresh Codex session in the target
-   so AGENTS.md and `.agents/skills/` are discovered. Setup stops here; feature implementation
+6. Explain where files landed and the first task. Start a fresh session in the target so the
+   instructions and skills are discovered (Codex: `.agents/skills/`; Claude Code: `.claude/skills/`). Setup stops here; feature implementation
    requires scope that includes it.
 
 For upgrades, run the helper from the newer BuildOS checkout. Unchanged owned assets update;
-project documents are seed-once. `--claude` adds a CLAUDE.md bridge: secondary manual
-compatibility, not tested Claude automation.
+project documents are seed-once. `--claude` also copies the skills to `.claude/skills/` and adds
+a CLAUDE.md block importing AGENTS.md, for Claude Code. It installs no Claude hooks.
 
 For removal, preview `uninstall --target <project>`, then use the same apply/hash flags.
 It removes unchanged owned content and unedited managed blocks, retaining modified files,

@@ -29,6 +29,10 @@ Project documents are seeded once and remain yours. A new profile does not overw
 PROJECT.md; edit that document deliberately. If switching capabilities/overlays, preview and check
 that instructions and project facts agree.
 
+Projects installed with the 0.3.0 `--claude` bridge upgrade automatically to the 0.3.1 form: the
+unedited CLAUDE.md block becomes an `@AGENTS.md` import and the skills are added to
+`.claude/skills/`. An existing, unowned `.claude/skills/buildos-*` file is a conflict, not overwritten.
+
 ## Uninstall
 
 Preview removal first. Unchanged owned files and unedited managed blocks are removed; modified

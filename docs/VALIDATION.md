@@ -6,7 +6,7 @@ Date: 2026-09-18. This describes the Codex-first 0.3 branch, not the earlier 0.2
 
 Python 3.14.2 on macOS, using disposable directories/repositories:
 
-The implementation run completed **27 tests**, the offline package/reference checker, and
+The implementation run completed **27 tests** (29 at 0.3.1), the offline package/reference checker, and
 `git diff --check`. The supplied Codex Plugin Creator validator and all four Skill Creator
 validators also passed, using PyYAML in a temporary environment outside this repository.
 
@@ -23,6 +23,9 @@ validators also passed, using PyYAML in a temporary environment outside this rep
 - Real command success/failure, timeout, changed-tree detection, stale evidence, and altered logs.
 - A complete helper lifecycle: setup, failing check, code fix, passing evidence, capture, index
   refresh, and a new process reading persisted resume state. This is not a fresh model-session trial.
+- Claude Code install (0.3.1): `--claude` mirrors the skills to `.claude/skills/`, imports
+  AGENTS.md from CLAUDE.md, preserves existing CLAUDE.md content, upgrades the 0.3.0 bridge, and
+  uninstalls cleanly. `claude plugin validate` passed for the plugin and marketplace.
 - Evaluation aggregation preserves failures, separates model/revision cohorts, rejects duplicate
   or incomplete records, and never invents missing trials.
 
@@ -40,6 +43,7 @@ to local tracked/nonignored files, excluding the three handoff documents (tasks/
 external systems, ignored artifacts, and submodule contents.
 
 No automatic session lifecycle, scheduler, or Control Center is installed or claimed tested.
-Claude compatibility is a manual bridge; live Claude sessions are not validated here. The local
+Claude support was checked by one headless Claude Code 2.1.291 session that listed the installed
+skills and the loaded AGENTS.md contract; full Claude workflow sessions are not validated here. The local
 Codex CLI version inspected was 0.154.0; configuration discovery and model behavior should be
 checked in a fresh session in each adopting project. Package validation is not that runtime test.

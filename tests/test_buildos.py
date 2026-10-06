@@ -112,6 +112,41 @@ class BuildOSTest(unittest.TestCase):
         self.assertEqual((self.root / "RESUME_HERE.md").read_text(), "My handoff")
         self.assertFalse((self.root / "CLAUDE.md").exists())
 
+    def test_claude_install_adds_discoverable_skills_and_imports_agents(self):
+        self.install()
+        self.assertFalse((self.root / ".claude").exists())
+        self.assertFalse((self.root / "CLAUDE.md").exists())
+        self.write("CLAUDE.md", "User Claude rule\n")
+        self.install(claude=True)
+        for skill in ("buildos-setup", "buildos-work", "buildos-knowledge", "buildos-capture"):
+            claude_copy = self.root / ".claude/skills" / skill / "SKILL.md"
+            self.assertEqual(claude_copy.read_bytes(), (self.root / ".agents/skills" / skill / "SKILL.md").read_bytes())
+        self.assertTrue((self.root / ".claude/skills/buildos-setup/scripts/buildos.py").is_file())
+        lines = (self.root / "CLAUDE.md").read_text().splitlines()
+        self.assertEqual(lines[0], "User Claude rule")
+        self.assertIn("@AGENTS.md", lines)
+        self.assertEqual(b.install_plan(self.root)[0], {})
+        self.assertEqual(self.run_cli("doctor")[0], 0)
+        b.transact(self.root, b.uninstall_plan(self.root)[0])
+        self.assertEqual((self.root / "CLAUDE.md").read_text(), "User Claude rule\n")
+        self.assertEqual([p for p in (self.root / ".claude").rglob("*") if p.is_file()], [])
+
+    def test_upgrade_replaces_old_claude_bridge_and_adds_skills(self):
+        self.install(claude=True)
+        old_block = b.render_block("CLAUDE.md", "Read AGENTS.md for the shared BuildOS contract.\nClaude compatibility is manual; no lifecycle hooks are installed.")
+        self.write("CLAUDE.md", old_block)
+        state = b.installed(self.root)
+        state["files"]["CLAUDE.md"]["sha256"] = b.digest(old_block.encode())
+        for relative in [r for r in state["files"] if r.startswith(".claude/")]:
+            del state["files"][relative]
+            (self.root / relative).unlink()
+        self.write(b.STATE, json.dumps(state))
+        changes, _ = b.install_plan(self.root)
+        self.assertIn(".claude/skills/buildos-work/SKILL.md", changes)
+        self.assertIn("@AGENTS.md", changes["CLAUDE.md"].decode())
+        b.transact(self.root, changes)
+        self.assertEqual(b.install_plan(self.root)[0], {})
+
     def test_uninstall_retains_privacy_for_retained_knowledge(self):
         self.git("init", "-q")
         self.install()

@@ -13,7 +13,7 @@ def check():
     problems = []
     manifests = [PLUGIN / ".codex-plugin/plugin.json", PLUGIN / ".claude-plugin/plugin.json"]
     loaded = [json.loads(p.read_text()) for p in manifests]
-    if any(d["name"] != "buildos" or d["version"] != "0.3.0" for d in loaded):
+    if any(d["name"] != "buildos" or d["version"] != "0.3.1" for d in loaded):
         problems.append("Release versions/names must agree.")
     if loaded[0].get("skills") != "./skills/":
         problems.append("Codex manifest must expose bundled skills.")

@@ -12,7 +12,7 @@ variables or tool names. The root contract respects the host instruction hierarc
 session is needed for reliable pickup; AGENTS.override.md and nested instructions can change
 which guidance applies and require inspection.
 
-Local environment inspected: Codex CLI 0.154.0, Claude Code 2.1.245, Python 3.14.2. The Python
+Local environment inspected: Codex CLI 0.154.0 (0.160.0 at 0.3.1), Claude Code 2.1.291, Python 3.14.2. The Python
 helper requires 3.10+ and Git for evidence binding. No credentials or model API calls are needed
 for its test suite. Local package/skill validation is separate from runtime model effectiveness.
 
@@ -20,10 +20,19 @@ Codex plugin metadata is included and validated with the Plugin Creator validato
 uses the repository-skill install route by default. No marketplace entry or personal plugin
 installation is created; app-store discovery is not claimed as tested.
 
-Claude's manifest remains for secondary use. `init --claude` adds a CLAUDE.md pointer to AGENTS.md.
-Skills and scripts can be followed manually; live Claude behavior has not been retested. Version
-0.2's SessionEnd agent-hook recipe was removed: that event does not support prompt/agent handlers
-in the [official hook reference](https://code.claude.com/docs/en/hooks#prompt-based-hooks).
+Claude Code (checked 2026-10-06 against 2.1.291 and the official
+[skills](https://code.claude.com/docs/en/skills) and [memory](https://code.claude.com/docs/en/memory)
+docs) discovers project skills only under `.claude/skills/` and reads nothing under `.agents/`.
+It reads AGENTS.md natively (2.1.277+) only when no CLAUDE.md exists. `init --claude` therefore
+copies the skills to `.claude/skills/` and adds a CLAUDE.md block importing `@AGENTS.md`.
+The Claude plugin manifest and repository marketplace pass `claude plugin validate`; the plugin
+installs from a local checkout with `claude plugin marketplace add` and exposes
+`/buildos:<skill>`. One headless Claude Code session in a disposable `--claude` project listed
+both the project and plugin skills and loaded the AGENTS.md contract. Full Claude workflow
+behavior has not been tested. Shared skill frontmatter stays within the Agent Skills spec, so
+Claude-only fields (for example `disable-model-invocation`) are not used. Version 0.2's
+SessionEnd agent-hook recipe was removed: SessionEnd still supports only command, HTTP, and MCP
+tool handlers in the [official hook reference](https://code.claude.com/docs/en/hooks#prompt-based-hooks).
 Existing project hooks are not automatically removed; see MIGRATION.md.
 
 No session hooks, scheduler, or multi-agent runtime is part of this release. Future adapters must

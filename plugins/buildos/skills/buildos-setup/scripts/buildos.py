@@ -18,7 +18,7 @@ import sys
 import tempfile
 import uuid
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 SKILLS = Path(__file__).resolve().parents[2]
 TEMPLATES = Path(__file__).resolve().parents[1] / "templates"
 STATE = ".buildos/install.json"
@@ -177,6 +177,9 @@ def install_plan(root, profile_path=None, claude=False):
     old = installed(root)
     profile = profile_load(profile_path, root, old)
     files, desired, warnings = {}, {}, []
+    claude = claude or "CLAUDE.md" in old.get("files", {})
+    # Claude Code discovers project skills only under .claude/skills/, never .agents/.
+    skill_roots = [".agents/skills/"] + ([".claude/skills/"] if claude else [])
     # Fully owned assets update only when unchanged; project documents are seed-once.
     for path in sorted(SKILLS.glob("buildos-*/*")):
         candidates = sorted(path.rglob("*")) if path.is_dir() else [path]
@@ -185,8 +188,8 @@ def install_plan(root, profile_path=None, claude=False):
                 continue
             if source.is_symlink():
                 raise Error(f"Symlink in source package: {source}")
-            relative = ".agents/skills/" + source.relative_to(SKILLS).as_posix()
-            desired[relative] = (source.read_bytes(), "owned")
+            for skill_root in skill_roots:
+                desired[skill_root + source.relative_to(SKILLS).as_posix()] = (source.read_bytes(), "owned")
     for source in sorted((TEMPLATES / "project").rglob("*")):
         if source.is_file():
             relative = source.relative_to(TEMPLATES / "project").as_posix()
@@ -205,8 +208,9 @@ def install_plan(root, profile_path=None, claude=False):
         instructions += f"\nFor relevant changes, read docs/buildos/overlays/{overlay}.md.\n"
     desired["AGENTS.md"] = (render_block("AGENTS.md", instructions).encode(), "block")
     desired[".gitignore"] = (render_block(".gitignore", "/knowledge/private/\n/knowledge/raw/\n/knowledge/compiled/\n/knowledge/sessions/\n/knowledge/INDEX.md\n/.buildos/local/\n/.buildos/write.lock\n**/__pycache__/\n").encode(), "block")
-    if claude or "CLAUDE.md" in old.get("files", {}):
-        desired["CLAUDE.md"] = (render_block("CLAUDE.md", "Read AGENTS.md for the shared BuildOS contract.\nClaude compatibility is manual; no lifecycle hooks are installed.").encode(), "block")
+    if claude:
+        # Any CLAUDE.md stops Claude Code from reading AGENTS.md natively; import it instead.
+        desired["CLAUDE.md"] = (render_block("CLAUDE.md", "@AGENTS.md\n\nBuildOS skills for Claude Code are in .claude/skills/; no lifecycle hooks are installed.").encode(), "block")
     changes = {}
     for relative, (content, kind) in desired.items():
         current = read(root, relative)
@@ -598,7 +602,7 @@ def main(argv=None):
             p.add_argument("--expect-plan")
         if name == "init":
             p.add_argument("--profile", help="JSON containing public project facts only")
-            p.add_argument("--claude", action="store_true", help="add a CLAUDE.md bridge; no hooks")
+            p.add_argument("--claude", action="store_true", help="add Claude Code skills and a CLAUDE.md import of AGENTS.md; no hooks")
         if name in ("summarize", "capture"):
             p.add_argument("--input", required=True, help="Private JSON input file")
         if name == "summarize":

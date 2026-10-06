@@ -1,6 +1,6 @@
 {
   "name": "buildos",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "BuildOS shared workflow and manual Claude compatibility. Codex is the primary tested integration; no lifecycle hooks are installed.",
   "author": {
     "name": "Justin Delshad"

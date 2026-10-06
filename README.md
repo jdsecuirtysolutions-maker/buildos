@@ -79,6 +79,8 @@ Installed layout:
 ```text
 AGENTS.md                         short managed block; existing instructions retained
 .agents/skills/buildos-*/          four skills, helper, and reusable templates
+.claude/skills/buildos-*/          same skills for Claude Code; only with --claude
+CLAUDE.md                         @AGENTS.md import block; only with --claude
 .buildos/install.json             version and ownership hashes; shareable
 .buildos/local/                   private evidence and temporary inputs; ignored
 BUILD_SESSION_PROMPTS.md           task status and acceptance evidence
@@ -111,6 +113,24 @@ Drop approved source material into `knowledge/private/raw/`, then use `$buildos-
 The helper tracks inventory and provenance; it does not magically extract PDFs or decide truth.
 Use `$buildos-capture` before a handoff when there is substantive learning. Nothing runs on exit.
 
+## Use in Claude Code
+
+To make the skills available as slash commands in every project, add this checkout as a local
+plugin marketplace once:
+
+```bash
+claude plugin marketplace add /absolute/path/to/buildos
+claude plugin install buildos@buildos --scope user
+```
+
+Then `/buildos:buildos-setup` (and `:buildos-work`, `:buildos-knowledge`, `:buildos-capture`)
+works in any session. A local-path plugin is read in place from the checkout, so it follows
+whatever branch is checked out. To install into a project for Claude Code, add `--claude` to
+both `init` commands. That copies the four skills into `.claude/skills/` (Claude Code does not
+read `.agents/`), so `/buildos-work` etc. work without the plugin. It also adds a CLAUDE.md
+block that imports `@AGENTS.md`: any CLAUDE.md turns off Claude Code's native AGENTS.md
+loading, so the import keeps the shared contract in effect.
+
 ## Upgrade or remove
 
 Use the helper from the newer checkout and repeat preview/apply. It updates unchanged package
@@ -137,5 +157,5 @@ checks from unrun model comparisons. [Evaluation protocol](evals/README.md) prov
 cases for ordinary instructions, compact BuildOS, and the complete workflow.
 
 Automatic capture and Control Center are **deferred**, not shipped features. Their graduation
-criteria are in [the roadmap](docs/ROADMAP.md). Claude support is a manual bridge (`init --claude`),
-not a tested automation integration. See [SECURITY.md](SECURITY.md). MIT licensed.
+criteria are in [the roadmap](docs/ROADMAP.md). Claude Code support covers skills and instructions
+only (see below); no Claude hooks or automation are installed. See [SECURITY.md](SECURITY.md). MIT licensed.
